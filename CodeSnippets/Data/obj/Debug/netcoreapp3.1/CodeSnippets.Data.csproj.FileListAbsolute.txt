@@ -1,0 +1,9 @@
+C:\Development\CodeSnippets\CodeSnippets\Data\bin\Debug\netcoreapp3.1\CodeSnippets.Data.deps.json
+C:\Development\CodeSnippets\CodeSnippets\Data\bin\Debug\netcoreapp3.1\CodeSnippets.Data.dll
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.csprojAssemblyReference.cache
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.AssemblyInfoInputs.cache
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.AssemblyInfo.cs
+C:\Development\CodeSnippets\CodeSnippets\Data\bin\Debug\netcoreapp3.1\CodeSnippets.Data.pdb
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.csproj.CoreCompileInputs.cache
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.dll
+C:\Development\CodeSnippets\CodeSnippets\Data\obj\Debug\netcoreapp3.1\CodeSnippets.Data.pdb
