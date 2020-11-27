@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSnippets.Data", "Data\CodeSnippets.Data.csproj", "{640A3792-EE69-402A-A500-3C57ACB87909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeSnippets.Data", "Data\CodeSnippets.Data.csproj", "{640A3792-EE69-402A-A500-3C57ACB87909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSnippets.Web", "CodeSnippets.Web\CodeSnippets.Web.csproj", "{84924758-49F4-42F7-B183-97794146989C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{640A3792-EE69-402A-A500-3C57ACB87909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{640A3792-EE69-402A-A500-3C57ACB87909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{640A3792-EE69-402A-A500-3C57ACB87909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84924758-49F4-42F7-B183-97794146989C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84924758-49F4-42F7-B183-97794146989C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84924758-49F4-42F7-B183-97794146989C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84924758-49F4-42F7-B183-97794146989C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
