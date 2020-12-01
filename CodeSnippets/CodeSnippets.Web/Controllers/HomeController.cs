@@ -84,17 +84,9 @@ namespace CodeSnippets.Web.Controllers
             }
         }
 
-        [HttpGet]
         public IActionResult DeleteSnippet(int id)
         {
-            var viewModel = new DeleteViewModel();
-            viewModel.Snippet = context.Snippets.Where(m => m.SnippetId == id).FirstOrDefault();
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult DeleteSnippet(Snippet snippet)
-        {
+            var snippet = context.Snippets.Where(m => m.SnippetId == id).FirstOrDefault();
             context.Snippets.Remove(snippet);
             context.SaveChanges();
             return RedirectToAction("Dashboard");

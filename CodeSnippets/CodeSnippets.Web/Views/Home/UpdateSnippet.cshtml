@@ -1,22 +1,73 @@
 ﻿@model AddEditSnippetViewModel
+    <link rel="stylesheet" href="~/tagify/tagify.css" />
+    <style type="text/css" media="screen">
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+    <h1>Update Snippet Page</h1>
 
-<h1>Update Snippet Page</h1>
-
-<form asp-action="UpdateSnippet" asp-controller="Home" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="form-group">
-        <label asp-for=@Model.Snippet.Name>Snippet Name</label>
-        <input asp-for=@Model.Snippet.Name class="form-control">
+    <!-- Modal -->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmLabel">Confirm Deletion of "@Model.Snippet.Name"?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <a asp-controller="Home" asp-action="DeleteSnippet" asp-route-id="@Model.Snippet.SnippetId" class="btn btn-danger" style="width: 100%">Delete</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for=@Model.Snippet.Code>Code</label>
-        <input asp-for=@Model.Snippet.Code class="form-control">
-    </div>
+    <form asp-action="UpdateSnippet" asp-controller="Home" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
 
-    <input type="hidden" asp-for=@Model.Snippet.SnippetId />
+        <div class="form-group">
+            <label asp-for=@Model.Snippet.Name>Snippet Name</label>
+            <input asp-for=@Model.Snippet.Name class="form-control">
+        </div>
 
-    <button type="submit" class="btn btn-primary">Update Snippet</button>
-    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Cancel</a>
-</form>
+        <div class="form-group">
+            <label>Tags</label>
+            <input name="basic" class='form-control' placeholder='write some tags'>
+        </div>
+
+        <div class="form-group">
+            <label for="editor">Code</label>
+            <div style="position: relative; min-height: 300px;">
+                <div id="editor">@Model.Snippet.Code</div>
+            </div>
+        </div>
+
+        <input type="hidden" asp-for=@Model.Snippet.SnippetId />
+
+        <button type="submit" class="btn btn-primary">Update Snippet</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirm">
+            Delete Snippet
+        </button>
+        <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Cancel</a>
+    </form>
+
+    <script src="~/tagify/tagify.min.js"></script>
+    <script src="~/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var input = document.querySelector('input[name=basic]');
+        // initialize Tagify on the above input node reference
+        new Tagify(input, {
+            delimiters: ",| "
+        })
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+    </script>

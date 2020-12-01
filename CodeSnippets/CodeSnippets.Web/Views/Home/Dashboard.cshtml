@@ -2,23 +2,24 @@
     @using CodeSnippets.Data.Models;
     ViewData["Title"] = "Home Page";
 }
+
+
 @model List<Snippet>
+<div class="container mt-4">
+    <div class="row">
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Code</th>
-        <th></th>
-    </tr>
-    @foreach(var snippet in Model)
-    {
-        <tr>
-            <td>@snippet.Name</td>
-            <td>@snippet.Code</td>
-            <td><a asp-controller="Home" asp-action="UpdateSnippet" asp-route-id ="@snippet.SnippetId" class="btn btn-outline-primary">Update</a>
-                <a asp-controller="Home" asp-action="DeleteSnippet" asp-route-id ="@snippet.SnippetId" class="btn btn-outline-primary">Delete</a></td>
-        </tr>
-    }
-</table>
-
+        @foreach (var snippet in Model)
+        {
+            <div class="col-auto mb-3">
+                <div class="card" style="width: 20rem;">
+                    <div class="card-body">
+                        <h5 class="card-title"><a asp-controller="Home" asp-action="UpdateSnippet" asp-route-id="@snippet.SnippetId">@snippet.Name</a></h5>
+                        <p class="card-text"><pre><code>@snippet.Code</code></pre></p>
+                        <a asp-controller="Home" asp-action="UpdateSnippet" asp-route-id="@snippet.SnippetId">thing</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 <a asp-controller="Home" asp-action="AddSnippet" class="btn btn-outline-primary">Add Snippet</a>

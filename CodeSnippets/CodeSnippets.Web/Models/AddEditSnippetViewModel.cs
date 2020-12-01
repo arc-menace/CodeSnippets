@@ -9,6 +9,7 @@ namespace CodeSnippets.Web.Models
     public class AddEditSnippetViewModel
     {
         public Snippet Snippet { get; set; }
+        public string TagString { get; set; } = "";
         public string ErrorMessage { get; set; } = "";
         public bool ShowErrorMessage { get; set; } = false;
 
