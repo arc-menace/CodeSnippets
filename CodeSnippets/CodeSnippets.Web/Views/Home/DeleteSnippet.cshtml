@@ -1,0 +1,13 @@
+﻿@model DeleteViewModel
+
+<h1>Delete Snippet Page</h1>
+
+<h2>Are you sure you want to delete @Model.Snippet.Name?</h2>
+<h2>This cannot be undone</h2>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for=@Model.Snippet.SnippetId />
+
+    <button type="submit" class="btn btn-primary">Confirm Deletion</button>
+    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Cancel</a>
+</form>

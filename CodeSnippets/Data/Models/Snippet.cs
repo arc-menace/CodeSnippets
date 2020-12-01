@@ -6,11 +6,12 @@ namespace CodeSnippets.Data.Models
 {
     public class Snippet : DatabaseEntity
     {
+        public int SnippetId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public ICollection<Tag> Tags { get; set; }
 
-        public Snippet(int creatorId) : base(creatorId) { }
+        public Snippet() : base() { }
 
         public void AutoGenerateTags()
         {

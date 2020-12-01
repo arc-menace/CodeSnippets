@@ -1,0 +1,22 @@
+﻿@model AddEditSnippetViewModel
+
+<h1>Update Snippet Page</h1>
+
+<form asp-action="UpdateSnippet" asp-controller="Home" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for=@Model.Snippet.Name>Snippet Name</label>
+        <input asp-for=@Model.Snippet.Name class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for=@Model.Snippet.Code>Code</label>
+        <input asp-for=@Model.Snippet.Code class="form-control">
+    </div>
+
+    <input type="hidden" asp-for=@Model.Snippet.SnippetId />
+
+    <button type="submit" class="btn btn-primary">Update Snippet</button>
+    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Cancel</a>
+</form>

@@ -6,22 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CodeSnippets.Data.Models
 {
     public class DatabaseEntity
-    {
-        public int Id { get; set; }
-
+    { 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CreatorId { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastUpdatedDate { get; set; } = DateTime.UtcNow;
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int LastUpdatorId { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastAccessedDate { get; set; } = DateTime.UtcNow;
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

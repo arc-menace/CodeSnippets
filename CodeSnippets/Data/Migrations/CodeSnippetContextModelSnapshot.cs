@@ -21,7 +21,7 @@ namespace CodeSnippets.Data.Migrations
 
             modelBuilder.Entity("CodeSnippets.Data.Models.Snippet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SnippetId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -37,14 +37,12 @@ namespace CodeSnippets.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastAccessedDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LastAccessorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LastUpdatorId")
@@ -53,14 +51,14 @@ namespace CodeSnippets.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SnippetId");
 
                     b.ToTable("Snippets");
                 });
 
             modelBuilder.Entity("CodeSnippets.Data.Models.Tag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TagId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -73,14 +71,12 @@ namespace CodeSnippets.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastAccessedDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LastAccessorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LastUpdatorId")
@@ -89,22 +85,22 @@ namespace CodeSnippets.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TagId");
 
                     b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("SnippetTag", b =>
                 {
-                    b.Property<int>("SnippetsId")
+                    b.Property<int>("SnippetsSnippetId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagsId")
+                    b.Property<int>("TagsTagId")
                         .HasColumnType("int");
 
-                    b.HasKey("SnippetsId", "TagsId");
+                    b.HasKey("SnippetsSnippetId", "TagsTagId");
 
-                    b.HasIndex("TagsId");
+                    b.HasIndex("TagsTagId");
 
                     b.ToTable("SnippetTag");
                 });
@@ -113,13 +109,13 @@ namespace CodeSnippets.Data.Migrations
                 {
                     b.HasOne("CodeSnippets.Data.Models.Snippet", null)
                         .WithMany()
-                        .HasForeignKey("SnippetsId")
+                        .HasForeignKey("SnippetsSnippetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CodeSnippets.Data.Models.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("TagsTagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
