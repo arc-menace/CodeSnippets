@@ -1,0 +1,40 @@
+﻿@{
+    @using CodeSnippets.Data.Models;
+    ViewData["Title"] = "Home Page";
+}
+
+
+@model DashboardViewModel
+<div class="container mt-4">
+    <div>
+        <form asp-action="Dashboard" asp-controller="Home" method="post">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-auto">
+                        <input asp-for=@Model.SearchTerm class="form-control" style="max-width: 400px">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+
+        @foreach (var snippet in Model.Snippets)
+        {
+            <div class="col-auto mb-3">
+                <div class="card" style="width: 20rem;">
+                    <div class="card-body">
+                        <h5 class="card-title"><a asp-controller="Home" asp-action="UpdateSnippet" asp-route-id="@snippet.SnippetId">@snippet.Name</a></h5>
+                        <p class="card-text"><pre><code>@snippet.Code</code></pre></p>
+                        <a asp-controller="Home" asp-action="UpdateSnippet" asp-route-id="@snippet.SnippetId">thing</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<a asp-controller="Home" asp-action="AddSnippet" class="btn btn-outline-primary">Add Snippet</a>

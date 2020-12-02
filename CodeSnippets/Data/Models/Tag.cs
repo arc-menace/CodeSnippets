@@ -4,12 +4,9 @@ using System.Text;
 
 namespace CodeSnippets.Data.Models
 {
-    public class Tag : DatabaseEntity
+    public class Tag
     {
+        public int TagId { get; set; }
         public string Name { get; set; }
-        public ICollection<Snippet> Snippets { get; set; }
-
-
-        public Tag(int creatorId) : base(creatorId) { }
     }
 }
