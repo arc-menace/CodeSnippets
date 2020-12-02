@@ -28,8 +28,60 @@ namespace CodeSnippets.Web.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            var snippets = context.Snippets.Select(n => n).ToList();
-            return View(snippets);
+            var viewModel = new DashboardViewModel();
+            viewModel.Snippets = context.Snippets.Select(n => n).ToList();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Dashboard(DashboardViewModel viewModel)
+        {
+            List<Snippet> snippets = new List<Snippet>();
+
+            //Filter list of snippets Here
+            if(viewModel.SearchTerm != "" && viewModel.SearchTerm != null)
+            {
+                List<string> search = viewModel.SearchTerm.Split().ToList();
+
+                foreach (var term in search)
+                {
+                    var tag = context.Tags.Where(m => m.Name == term).FirstOrDefault();
+                    if(tag != null)
+                    {
+                        var joinTags = context.SnippetTags.Where(m => m.TagId == tag.TagId).ToList();
+                        foreach(var joinTag in joinTags)
+                        {
+                            var snippet = context.Snippets.Where(m => m.SnippetId == joinTag.SnippetId).FirstOrDefault();
+                            if(snippet != null)
+                            {
+                                snippets.Add(snippet);
+                            }
+                        }
+                    }
+
+                    var keyword = context.Keywords.Where(m => m.Word == term).FirstOrDefault();
+                    if (keyword != null)
+                    {
+                        var joinKeywords = context.SnippetKeywords.Where(m => m.KeywordId == keyword.KeywordId).ToList();
+                        foreach (var joinKeyword in joinKeywords)
+                        {
+                            var snippet = context.Snippets.Where(m => m.SnippetId == joinKeyword.SnippetId).FirstOrDefault();
+                            if (snippet != null)
+                            {
+                                snippets.Add(snippet);
+                            }
+                        }
+                    }
+                }
+
+                viewModel.Snippets = snippets.Distinct().ToList();
+            }
+            else
+            {
+                //Empty seach term, return all snippets
+                viewModel.Snippets = context.Snippets.Select(n => n).ToList();
+            }
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -76,7 +128,6 @@ namespace CodeSnippets.Web.Controllers
                             context.Tags.Add(existingTag);
                             context.SaveChanges(); //Save to generate TagId
                         }
-
                         //Check if join already exists
                         var join = context.SnippetTags.Where(m => 
                             m.SnippetId == model.Snippet.SnippetId &&
@@ -94,7 +145,7 @@ namespace CodeSnippets.Web.Controllers
 
                     }
                 }
-
+                model.Snippet.AutoGenerateKeywords(context);
                 context.SaveChanges();
                 return RedirectToAction("Dashboard");
             }
@@ -121,7 +172,7 @@ namespace CodeSnippets.Web.Controllers
             var tags = new List<Tag>();
             foreach(var join in joinModels)
             {
-                tags.Add(context.Tags.Where(m => m.TagId == join.TagId && m.Visible).FirstOrDefault());
+                tags.Add(context.Tags.Where(m => m.TagId == join.TagId).FirstOrDefault());
             }
 
             //generate Tag string
@@ -163,7 +214,7 @@ namespace CodeSnippets.Web.Controllers
                     model.TagString = model.TagString.Remove(0, 1);
 
                     //Break into individual tag values
-                    string[] tagArr = model.TagString.Split(",");
+                    List<string> tagArr = model.TagString.Split(",").ToList();
 
                     if (model.TagString != null)
                     {
@@ -174,7 +225,7 @@ namespace CodeSnippets.Web.Controllers
                         model.TagString = model.TagString.Remove(0, 1);
 
                         //Break into individual tag values
-                        for (int i = 0; i < tagArr.Length; i++)
+                        for (int i = 0; i < tagArr.Count; i++)
                         {
                             var tag = tagArr[i];
                             //Remove {\"value\":\"
@@ -189,16 +240,17 @@ namespace CodeSnippets.Web.Controllers
                                 existingTag = new Tag();
                                 //Tag did not already exist. Create and add to context
                                 existingTag.Name = tag;
-                                existingTag.Visible = true;
+                                
                                 context.Tags.Add(existingTag);
                                 context.SaveChanges(); //Save to generate TagId
                             }
-
                             var join = new SnippetTag();
                             join.TagId = existingTag.TagId;
                             join.SnippetId = model.Snippet.SnippetId;
                             context.SnippetTags.Add(join);
                         }
+
+                        snippet.AutoGenerateKeywords(context);
                     }
                 }
 
@@ -208,7 +260,7 @@ namespace CodeSnippets.Web.Controllers
                 var tags = new List<Tag>();
                 foreach (var join in joinModels)
                 {
-                    tags.Add(context.Tags.Where(m => m.TagId == join.TagId && m.Visible).FirstOrDefault());
+                    tags.Add(context.Tags.Where(m => m.TagId == join.TagId).FirstOrDefault());
                 }
                 model.TagString = "";
                 foreach (var tag in tags)
