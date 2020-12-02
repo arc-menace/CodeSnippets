@@ -55,6 +55,8 @@
     editor.setTheme("ace/theme/sqlserver");
     editor.session.setMode("ace/mode/csharp");
 
+
+    //https://stackoverflow.com/questions/12769041/how-to-get-jquery-auto-complete-tagify-values-in-c-sharp-asp-net
     $("form").submit(function () {
         $("#hidden_editor").val(editor.getSession().getValue());
         var tagStr = $("#basic").val();

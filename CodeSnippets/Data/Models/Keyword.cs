@@ -4,9 +4,9 @@ using System.Text;
 
 namespace CodeSnippets.Data.Models
 {
-    public class Tag
+    public class Keyword
     {
-        public int TagId { get; set; }
-        public string Name { get; set; }
+        public int KeywordId { get; set; }
+        public string Word { get; set; }
     }
 }
