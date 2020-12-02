@@ -79,7 +79,7 @@ C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\Razor\Views\Home\UpdateSnippet.cshtml.g.cs
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
-C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\CodeSnippets.Web.csproj.CoreCompileInputs.cache
-C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\CodeSnippets.Web.MvcApplicationPartsAssemblyInfo.cache
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.Design.dll
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.Design.dll
+C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\CodeSnippets.Web.csproj.CoreCompileInputs.cache
+C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\CodeSnippets.Web.MvcApplicationPartsAssemblyInfo.cache

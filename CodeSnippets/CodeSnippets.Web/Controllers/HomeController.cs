@@ -9,6 +9,7 @@ using CodeSnippets.Web.Models;
 using CodeSnippets.Data.Services;
 using CodeSnippets.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CodeSnippets.Web.Controllers
 {
@@ -38,18 +39,64 @@ namespace CodeSnippets.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddSnippet(Snippet snippet)
+        public IActionResult AddSnippet(AddEditSnippetViewModel model)
         {
             if(ModelState.IsValid)
             {
-                context.Snippets.Add(snippet);
+                //Create Snippet to get generate snippet id
+                context.Snippets.Add(model.Snippet);
+                context.SaveChanges();
+
+                //tags sent as string array of form:
+                //"[{\"value\":\"tag1\"},{\"value\":\"tag2\"},{\"value\":\"tag3\"}]"
+                //First remove end brackets
+                model.TagString = model.TagString.Remove(model.TagString.Length - 1, 1);
+                model.TagString = model.TagString.Remove(0, 1);
+
+                //Break into individual tag values
+                string[] tagArr = model.TagString.Split(",");
+                for(int i = 0; i < tagArr.Length; i++)
+                {
+                    var tag = tagArr[i];
+                    //Remove {\"value\":\"
+                    tag = tag.Remove(0, 10); //values are lower than true length (13 characters) to do escapement
+                    //Remove \"}
+                    tag = tag.Substring(0, tag.Length - 2);
+
+                    var existingTag = context.Tags.Where(m => m.Name == tag).FirstOrDefault();
+
+                    if (existingTag == default(Tag))
+                    {
+                        Tag snippetTag = new Tag();
+                        snippetTag.Name = tag;
+                        snippetTag.SetCreatorId(0);
+                        snippetTag.Snippets.Add(model.Snippet);
+
+                        context.Tags.Add(snippetTag);
+                        context.SaveChanges();
+
+                        model.Snippet.Tags.Add(snippetTag);
+                        context.Snippets.Update(model.Snippet);
+                    }
+                    else
+                    {
+                        existingTag.Snippets.Add(model.Snippet);
+                        context.Tags.Update(existingTag);
+                        model.Snippet.Tags.Add(existingTag);
+                        context.Snippets.Update(model.Snippet);
+                    }
+                    
+                }
+                
+
+                
                 context.SaveChanges();
                 return RedirectToAction("Dashboard");
             }
             else
             {
                 var viewModel = new AddEditSnippetViewModel();
-                viewModel.Snippet = snippet;
+                viewModel.Snippet = model.Snippet;
                 viewModel.ShowErrorMessage = true;
                 viewModel.ErrorMessage = "Invalid Model State";
                 return View(viewModel);
@@ -62,6 +109,13 @@ namespace CodeSnippets.Web.Controllers
             var viewModel = new AddEditSnippetViewModel();
             viewModel.Snippet = context.Snippets.Where(m => m.SnippetId == id).FirstOrDefault();
 
+            //Load Tags
+            viewModel.Snippet.Tags = context.Tags.Where(m => m.Snippets.Any(j => j.SnippetId == id)).ToList();
+
+            foreach (var tag in viewModel.Snippet.Tags)
+            {
+                viewModel.TagString += tag.Name + ",";
+            }
             return View(viewModel);
         }
 

@@ -11,7 +11,10 @@ namespace CodeSnippets.Data.Models
         public string Name { get; set; }
         public ICollection<Tag> Tags { get; set; }
 
-        public Snippet() : base() { }
+        public Snippet() : base() 
+        {
+            Tags = new List<Tag>();
+        }
 
         public void AutoGenerateTags()
         {

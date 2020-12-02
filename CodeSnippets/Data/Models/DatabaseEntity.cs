@@ -24,7 +24,8 @@ namespace CodeSnippets.Data.Models
         public int LastAccessorId { get; set; }
 
         public DatabaseEntity() { }
-        public DatabaseEntity(int creatorId)
+        
+        public void SetCreatorId(int creatorId)
         {
             CreatorId = creatorId;
             LastUpdatorId = creatorId;

@@ -11,6 +11,9 @@ namespace CodeSnippets.Data.Models
         public ICollection<Snippet> Snippets { get; set; }
 
 
-        public Tag(int creatorId) : base(creatorId) { }
+        public Tag() : base() 
+        {
+            Snippets = new List<Snippet>();
+        }
     }
 }

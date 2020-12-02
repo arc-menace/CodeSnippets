@@ -1,4 +1,5 @@
 ﻿@model AddEditSnippetViewModel
+
     <link rel="stylesheet" href="~/tagify/tagify.css" />
     <style type="text/css" media="screen">
         #editor {
@@ -38,7 +39,7 @@
 
         <div class="form-group">
             <label>Tags</label>
-            <input name="basic" class='form-control' placeholder='write some tags'>
+            <input name="basic" class='form-control' value=@Model.TagString placeholder='write some tags'>
         </div>
 
         <div class="form-group">
@@ -68,6 +69,6 @@
         })
 
         var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/javascript");
+        editor.setTheme("ace/theme/sqlserver");
+        editor.session.setMode("ace/mode/csharp");
     </script>
