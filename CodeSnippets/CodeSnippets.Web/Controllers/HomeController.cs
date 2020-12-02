@@ -47,49 +47,54 @@ namespace CodeSnippets.Web.Controllers
                 context.Snippets.Add(model.Snippet);
                 context.SaveChanges();
 
-                //tags sent as string array of form:
-                //"[{\"value\":\"tag1\"},{\"value\":\"tag2\"},{\"value\":\"tag3\"}]"
-                //First remove end brackets
-                model.TagString = model.TagString.Remove(model.TagString.Length - 1, 1);
-                model.TagString = model.TagString.Remove(0, 1);
-
-                //Break into individual tag values
-                string[] tagArr = model.TagString.Split(",");
-                for(int i = 0; i < tagArr.Length; i++)
+                if (model.TagString != null)
                 {
-                    var tag = tagArr[i];
-                    //Remove {\"value\":\"
-                    tag = tag.Remove(0, 10); //values are lower than true length (13 characters) to do escapement
-                    //Remove \"}
-                    tag = tag.Substring(0, tag.Length - 2);
+                    //tags sent as string array of form:
+                    //"[{\"value\":\"tag1\"},{\"value\":\"tag2\"},{\"value\":\"tag3\"}]"
+                    //First remove end brackets
+                    model.TagString = model.TagString.Remove(model.TagString.Length - 1, 1);
+                    model.TagString = model.TagString.Remove(0, 1);
 
-                    var existingTag = context.Tags.Where(m => m.Name == tag).FirstOrDefault();
-
-                    if (existingTag == default(Tag))
+                    //Break into individual tag values
+                    string[] tagArr = model.TagString.Split(",");
+                    for (int i = 0; i < tagArr.Length; i++)
                     {
-                        Tag snippetTag = new Tag();
-                        snippetTag.Name = tag;
-                        snippetTag.SetCreatorId(0);
-                        snippetTag.Snippets.Add(model.Snippet);
+                        var tag = tagArr[i];
+                        //Remove {\"value\":\"
+                        tag = tag.Remove(0, 10); //values are lower than true length (13 characters) to do escapement
+                                                 //Remove \"}
+                        tag = tag.Substring(0, tag.Length - 2);
 
-                        context.Tags.Add(snippetTag);
-                        context.SaveChanges();
+                        var existingTag = context.Tags.Where(m => m.Name == tag).FirstOrDefault();
 
-                        model.Snippet.Tags.Add(snippetTag);
-                        context.Snippets.Update(model.Snippet);
+                        if (existingTag == default(Tag))
+                        {
+                            existingTag = new Tag();
+                            //Tag did not already exist. Create and add to context
+                            existingTag.Name = tag;
+
+                            context.Tags.Add(existingTag);
+                            context.SaveChanges(); //Save to generate TagId
+                        }
+
+                        //Check if join already exists
+                        var join = context.SnippetTags.Where(m => 
+                            m.SnippetId == model.Snippet.SnippetId &&
+                            m.TagId == existingTag.TagId)
+                            .FirstOrDefault();
+
+                        if (join == default(SnippetTag))
+                        {
+                            join = new SnippetTag();
+                            join.TagId = existingTag.TagId;
+                            join.SnippetId = model.Snippet.SnippetId;
+                            context.SnippetTags.Add(join);
+                        }
+
+
                     }
-                    else
-                    {
-                        existingTag.Snippets.Add(model.Snippet);
-                        context.Tags.Update(existingTag);
-                        model.Snippet.Tags.Add(existingTag);
-                        context.Snippets.Update(model.Snippet);
-                    }
-                    
                 }
-                
 
-                
                 context.SaveChanges();
                 return RedirectToAction("Dashboard");
             }
@@ -107,31 +112,118 @@ namespace CodeSnippets.Web.Controllers
         public IActionResult UpdateSnippet(int id)
         {
             var viewModel = new AddEditSnippetViewModel();
+
+            //load snippet
             viewModel.Snippet = context.Snippets.Where(m => m.SnippetId == id).FirstOrDefault();
 
             //Load Tags
-            viewModel.Snippet.Tags = context.Tags.Where(m => m.Snippets.Any(j => j.SnippetId == id)).ToList();
-
-            foreach (var tag in viewModel.Snippet.Tags)
+            var joinModels = context.SnippetTags.Where(m => m.SnippetId == id).ToList();
+            var tags = new List<Tag>();
+            foreach(var join in joinModels)
             {
-                viewModel.TagString += tag.Name + ",";
+                tags.Add(context.Tags.Where(m => m.TagId == join.TagId && m.Visible).FirstOrDefault());
+            }
+
+            //generate Tag string
+            viewModel.TagString = "";
+            foreach (var tag in tags)
+            {
+                if(tag != null)
+                {
+                    viewModel.TagString += tag.Name + ",";
+                }
             }
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult UpdateSnippet(Snippet snippet)
+        public IActionResult UpdateSnippet(AddEditSnippetViewModel model)
         {
             if (ModelState.IsValid)
             {
-                context.Snippets.Update(snippet);
+                //Db Items
+                context.Snippets.Update(model.Snippet);
+                var snippet = context.Snippets.Where(m => m.SnippetId == model.Snippet.SnippetId).FirstOrDefault();
+                var joinModels = context.SnippetTags.Where(m => m.SnippetId == snippet.SnippetId).ToList();
+                //delete existing relationships
+                foreach(var join in joinModels)
+                {
+                    context.SnippetTags.Remove(join);
+                }
                 context.SaveChanges();
-                return RedirectToAction("Dashboard");
+
+
+                //tags sent as string array of form:
+                //"[{\"value\":\"tag1\"},{\"value\":\"tag2\"},{\"value\":\"tag3\"}]"
+                //First remove end brackets
+                if (model.TagString != null)
+                {
+
+                    model.TagString = model.TagString.Remove(model.TagString.Length - 1, 1);
+                    model.TagString = model.TagString.Remove(0, 1);
+
+                    //Break into individual tag values
+                    string[] tagArr = model.TagString.Split(",");
+
+                    if (model.TagString != null)
+                    {
+                        //tags sent as string array of form:
+                        //"[{\"value\":\"tag1\"},{\"value\":\"tag2\"},{\"value\":\"tag3\"}]"
+                        //First remove end brackets
+                        model.TagString = model.TagString.Remove(model.TagString.Length - 1, 1);
+                        model.TagString = model.TagString.Remove(0, 1);
+
+                        //Break into individual tag values
+                        for (int i = 0; i < tagArr.Length; i++)
+                        {
+                            var tag = tagArr[i];
+                            //Remove {\"value\":\"
+                            tag = tag.Remove(0, 10); //values are lower than true length (13 characters) to do escapement
+                                                     //Remove \"}
+                            tag = tag.Substring(0, tag.Length - 2);
+
+                            var existingTag = context.Tags.Where(m => m.Name == tag).FirstOrDefault();
+
+                            if (existingTag == default(Tag))
+                            {
+                                existingTag = new Tag();
+                                //Tag did not already exist. Create and add to context
+                                existingTag.Name = tag;
+                                existingTag.Visible = true;
+                                context.Tags.Add(existingTag);
+                                context.SaveChanges(); //Save to generate TagId
+                            }
+
+                            var join = new SnippetTag();
+                            join.TagId = existingTag.TagId;
+                            join.SnippetId = model.Snippet.SnippetId;
+                            context.SnippetTags.Add(join);
+                        }
+                    }
+                }
+
+                context.SaveChanges();
+                //generate Tag string
+                joinModels = context.SnippetTags.Where(m => m.SnippetId == model.Snippet.SnippetId).ToList();
+                var tags = new List<Tag>();
+                foreach (var join in joinModels)
+                {
+                    tags.Add(context.Tags.Where(m => m.TagId == join.TagId && m.Visible).FirstOrDefault());
+                }
+                model.TagString = "";
+                foreach (var tag in tags)
+                {
+                    if(tag != null)
+                    {
+                        model.TagString += tag.Name + ",";
+                    }
+                }
+                return View(model);
             }
             else
             {
                 var viewModel = new AddEditSnippetViewModel();
-                viewModel.Snippet = snippet;
+                viewModel.Snippet = model.Snippet;
                 viewModel.ShowErrorMessage = true;
                 viewModel.ErrorMessage = "Invalid Model State";
                 return View(viewModel);

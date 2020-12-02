@@ -4,17 +4,11 @@ using System.Text;
 
 namespace CodeSnippets.Data.Models
 {
-    public class Snippet : DatabaseEntity
+    public class Snippet
     {
         public int SnippetId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public ICollection<Tag> Tags { get; set; }
-
-        public Snippet() : base() 
-        {
-            Tags = new List<Tag>();
-        }
 
         public void AutoGenerateTags()
         {

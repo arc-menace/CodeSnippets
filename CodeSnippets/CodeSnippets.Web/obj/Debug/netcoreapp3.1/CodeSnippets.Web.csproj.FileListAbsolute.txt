@@ -75,7 +75,6 @@ C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\CodeSnippets.Data.dll
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\CodeSnippets.Data.pdb
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\Razor\Views\Home\AddSnippet.cshtml.g.cs
-C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\Razor\Views\Home\DeleteSnippet.cshtml.g.cs
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\obj\Debug\netcoreapp3.1\Razor\Views\Home\UpdateSnippet.cshtml.g.cs
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Development\CodeSnippets\CodeSnippets\CodeSnippets.Web\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll

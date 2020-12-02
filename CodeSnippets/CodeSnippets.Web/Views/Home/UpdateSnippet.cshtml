@@ -39,11 +39,14 @@
 
         <div class="form-group">
             <label>Tags</label>
-            <input name="basic" class='form-control' value=@Model.TagString placeholder='write some tags'>
+            <input type="hidden" id="hidden_tags" asp-for=@Model.TagString />
+            <input name="basic" id="basic" class='form-control' value="@Model.TagString" placeholder='add some tags'>
         </div>
 
         <div class="form-group">
             <label for="editor">Code</label>
+            <input type="hidden" id="hidden_editor" asp-for=@Model.Snippet.Code />
+
             <div style="position: relative; min-height: 300px;">
                 <div id="editor">@Model.Snippet.Code</div>
             </div>
@@ -61,6 +64,7 @@
 
     <script src="~/tagify/tagify.min.js"></script>
     <script src="~/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
         var input = document.querySelector('input[name=basic]');
         // initialize Tagify on the above input node reference
@@ -71,4 +75,10 @@
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/sqlserver");
         editor.session.setMode("ace/mode/csharp");
-    </script>
+
+        $("form").submit(function () {
+            $("#hidden_editor").val(editor.getSession().getValue());
+            var tagStr = $("#basic").val();
+            $('#hidden_tags').val(tagStr);
+        });
+    </script> 
