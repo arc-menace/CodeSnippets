@@ -1,4 +1,5 @@
 # CodeSnippets
+This was written as a school project as an example of a WPF application
 
 # Setup
 To get this project up and running, set the connection string to your Microsoft SQL Server Database (the database does not have exist yet). 
